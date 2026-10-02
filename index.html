@@ -6,7 +6,7 @@ async function openStage(){
  try{
   const raw=Uint8Array.from(atob(k.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-k.length%4)%4)),c=>c.charCodeAt(0));
   const key=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
-  const response=await fetch(file);if(!response.ok)throw Error('network');
+  const response=await fetch(file,{cache:"no-store"});if(!response.ok)throw Error('network');
   const data=new Uint8Array(await response.arrayBuffer());
   const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:data.slice(0,12)},key,data.slice(12));
   const html=new TextDecoder().decode(plain);
